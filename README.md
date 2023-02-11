@@ -47,13 +47,13 @@ https://api.websitecarbon.com/site?url=https://google.com
 
 Schema:
 
-- User
+1. User
 - UserId
 - Username
 - Password
 - Visited Websites [ ]
 - Total Carbon Emitted
-- Sessions
+2. Sessions
 - SessionId
 - UserId (ref)
 - Website URL
