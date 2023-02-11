@@ -21,7 +21,13 @@ app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/website', websiteRoutes);
 
-app.get("/", (req, res) => {
+app.post("/api", (req, res) => {
+    const { userId } = req.body
+    console.log(userId)
+    res.send({})
+});
+
+app.get('/', (req, res) => {
     const visitedWebsites = [
         {
             rank: 1,
@@ -120,8 +126,8 @@ app.get("/", (req, res) => {
             carbon: 23.8
         },
     ];
-    res.render("ranking", { visitedWebsites: visitedWebsites });
-});
+    res.render('ranking', { visitedWebsites: visitedWebsites })
+})
 
 app.listen(PORT, () => {
     console.log(`Listening at ${PORT}`)

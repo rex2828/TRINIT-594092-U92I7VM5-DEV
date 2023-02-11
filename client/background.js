@@ -89,7 +89,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 async function callCarbonAPI(details) {
     if (details.type === "main_frame") {
         chrome.storage.local.get(['userStatus', 'user_info'], async function (items) {
-            console.log(items.user_info)
             const response = await fetch('http://localhost:3000/api/website', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -119,3 +118,15 @@ function deactivate() {
         ["blocking"]
     );
 }
+
+
+
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+    if (changeInfo.status === "complete" && tab.url === "http://localhost:3000/") {
+        chrome.storage.local.get(['user_info'], async function (items) {
+            const userId = items.user_info.userId;
+            var code = `localStorage.setItem("user_info", "${String(userId)}");`;
+            chrome.tabs.executeScript(tabId, { code: code });
+        });
+    }
+});

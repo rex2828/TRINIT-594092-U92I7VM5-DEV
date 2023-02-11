@@ -7,11 +7,10 @@ const updateCarbonEmission = asyncHandler(async (req, res) => {
     if (url.length > 30) {
         return
     }
+    const userData = await User.findOne({ _id: user.userId })
     axios.get(`https://api.websitecarbon.com/site?url=${url}`)
         .then(async function (response) {
-            // handle success
             const data = response.data
-            // console.log(data)
             const mainUrl = new URL(url).hostname
             let website = await Website.findOne({ url: mainUrl, userid: user.userId })
             if (website === null) {
@@ -26,19 +25,27 @@ const updateCarbonEmission = asyncHandler(async (req, res) => {
                 website.energyUsed += data.statistics.energy
                 await website.save()
             }
-            console.log(website)
+            userData.totalCarbonEmitted += data.statistics.co2.grid.grams
+            if (userData.visitedWebsites) {
+                if (!userData.visitedWebsites.includes(website._id)) {
+                    userData.visitedWebsites.push(website._id)
+                }
+            } else {
+                userData.visitedWebsites = [website._id]
+            }
+            await userData.save()
+            // console.log(website)
             res.send(website)
         })
         .catch(function (error) {
             // handle error
-            console.log(error)
+            // console.log(error)
             res.send(error)
         })
 })
 
 const myCarbon = asyncHandler(async (req, res) => {
     const { user } = req.body
-    console.log(req.body)
     const mySites = await Website.find({
         userid: user.userId
     })

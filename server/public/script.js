@@ -46,8 +46,8 @@ function sortTable(column, sort_asc) {
   [...table_rows]
     .sort((a, b) => {
       let first_row = a
-          .querySelectorAll("td")
-          [column].textContent.toLowerCase(),
+        .querySelectorAll("td")
+      [column].textContent.toLowerCase(),
         second_row = b.querySelectorAll("td")[column].textContent.toLowerCase();
 
       return sort_asc
@@ -55,8 +55,8 @@ function sortTable(column, sort_asc) {
           ? 1
           : -1
         : first_row < second_row
-        ? -1
-        : 1;
+          ? -1
+          : 1;
     })
     .map((sorted_row) =>
       document.querySelector("tbody").appendChild(sorted_row)
@@ -241,3 +241,21 @@ const downloadFile = function (data, fileType, fileName = "") {
   a.click();
   a.remove();
 };
+
+
+const userId = localStorage.getItem('user_info')
+
+console.log(userId)
+
+async function fetchdata() {
+  const response = await fetch('http://localhost:3000/api', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      userId,
+    })
+  })
+  const data = await response.json()
+}
+
+fetchdata()
