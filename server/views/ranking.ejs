@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" title="Coding design">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Carbon Footprint</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <main class="table">
+        <section class="table__header">
+            <h1>Websites You Visited</h1>
+            <div class="input-group">
+                <input type="search" placeholder="Search Data...">
+                <img src="images/search.png" alt="">
+            </div>
+            <div class="export__file">
+                <label for="export-file" class="export__file-btn" title="Export File"></label>
+                <input type="checkbox" id="export-file">
+                <div class="export__file-options">
+                    <label>Export As &nbsp; &#10140;</label>
+                    <label for="export-file" id="toPDF">PDF <img src="images/pdf.png" alt=""></label>
+                    <label for="export-file" id="toJSON">JSON <img src="images/json.png" alt=""></label>
+                    <label for="export-file" id="toCSV">CSV <img src="images/csv.png" alt=""></label>
+                    <label for="export-file" id="toEXCEL">EXCEL <img src="images/excel.png" alt=""></label>
+                </div>
+            </div>
+        </section>
+        <section class="table__body">
+            <table>
+                <thead>
+                    <tr>
+                        <th> Rank <span class="icon-arrow">&UpArrow;</span></th>
+                        <th> Domain Name<span class="icon-arrow">&UpArrow;</span></th>
+                        <th> URL <span class="icon-arrow">&UpArrow;</span></th>
+                        <th> Visiting Count <span class="icon-arrow">&UpArrow;</span></th>
+                        <th> Category <span class="icon-arrow">&UpArrow;</span></th>
+                        <th> Carbon Emission <span class="icon-arrow">&UpArrow;</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% visitedWebsites.forEach(website=> { %>
+                        <tr>
+                            <td>
+                                <%=website.rank%>
+                            </td>
+                            <td>
+                                <%=website.domain%>
+                            </td>
+                            <td>
+                                <%=website.url%>
+                            </td>
+                            <td>
+                                <%=website.times%>
+                            </td>
+                            <td>
+                                <p class="status <%=website.category%>">
+                                    <%=website.category%>
+                                </p>
+                            </td>
+                            <td> <strong>
+                                    <%=website.carbon%>
+                                </strong></td>
+                        </tr>
+                        <% }); %>
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+
+</html>
