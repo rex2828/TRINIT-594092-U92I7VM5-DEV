@@ -24,22 +24,24 @@ function flip_user_status(signIn, user_info) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(user_info)
-        }).then(res => {
-            return new Promise(resolve => {
-                if (res.status !== 200) resolve('fail')
-                chrome.storage.local.set({ userStatus: signIn, user_info }, function (response) {
-                    if (chrome.runtime.lastError) resolve('fail')
-                    user_signed_in = true
-                    resolve('success')
+        })
+            .then(res => res.json())
+            .then(data => {
+                return new Promise(resolve => {
+                    if (data.status !== 'SUCCESS') resolve('fail')
+                    chrome.storage.local.set({ userStatus: signIn, user_info: { ...user_info, userId: data.user._id } }, function (response) {
+                        if (chrome.runtime.lastError) resolve('fail')
+                        user_signed_in = true
+                        resolve('success')
+                    })
                 })
-            })
 
-        }).catch(err => console.log(err))
+            }).catch(err => console.log(err))
     } else if (!signIn) {
         return new Promise(resolve => {
             chrome.storage.local.get(['userStatus', 'user_info'], function (response) {
                 if (chrome.runtime.lastError) resolve('fail');
-
+                console.log(response.user_info)
                 if (response.userStatus === undefined) resolve('fail');
 
                 fetch('http://localhost:3000/api/users/logout', {
@@ -54,6 +56,7 @@ function flip_user_status(signIn, user_info) {
                             if (chrome.runtime.lastError) resolve('fail');
 
                             user_signed_in = signIn;
+                            deactivate()
                             resolve('success');
                         });
                     })
@@ -81,16 +84,21 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
 })
 
+
+
 async function callCarbonAPI(details) {
     if (details.type === "main_frame") {
-        const response = await fetch('http://localhost:3000/api/website', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                url: details.url
+        chrome.storage.local.get(['userStatus', 'user_info'], async function (items) {
+            console.log(items.user_info)
+            const response = await fetch('http://localhost:3000/api/website', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    url: details.url,
+                    user: items.user_info,
+                })
             })
-        })
-
+        });
     }
     return {};
 }

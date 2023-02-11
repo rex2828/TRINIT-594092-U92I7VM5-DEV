@@ -23,6 +23,18 @@ button.addEventListener('click', () => {
     })
 });
 
+chrome.storage.local.get(['user_info'], async function (response) {
+    const resp = await fetch('http://localhost:3000/api/website/myCarbon', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            user: response.user_info,
+        })
+    })
+    const data = await resp.json()
+
+})
+
 activateBtn.addEventListener('change', (e) => {
     if (e.target.checked) {
         chrome.runtime.sendMessage({ message: 'activate' }, function (response) {
