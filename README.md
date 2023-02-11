@@ -36,7 +36,7 @@ https://api.websitecarbon.com/site?url=https://google.com
 
 
 - Make a browser extension and calculate carbon footprint based on the total data sent/received when a user visits any website.
-- Generate and display to the user the expected carbon footprint he has caused by visiting various websites.
+- Generate and display to the user the expected carbon footprint he has caused by visiting various websites. 
 - Create a website and display web pages based on their rank based on the overall footprint.
 - Provide detailed carbon emissions caused by users on different sessions.
 - To categorise websites as Green, Semi-Green, and Non-Green using parameters from emission data.
@@ -51,10 +51,16 @@ Schema:
 - UserId
 - Username
 - Password
-- Visited Websites [ ]
+- Visited Websites [ Array of Website Entities ]
 - Total Carbon Emitted
 2. Sessions
 - SessionId
 - UserId (ref)
 - Website URL
 - Carbon Emitted
+3. Website
+- WebsiteId
+- UserId (ref)
+- URL
+- Carbon Emitted
+
